@@ -109,12 +109,13 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 -->
 
 ### **WORK IN PROGRESS**
-* (Prossegger Markus) initial release
-
+* (maxx8888) initial release
+* (maxx8888) added Adapter Instance Settings
+ 
 ## License
 MIT License
 
-Copyright (c) 2022 Prossegger Markus <markus@prossegger.at>
+Copyright (c) 2022 maxx8888 <markus@prossegger.at>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

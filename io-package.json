@@ -1,107 +1,112 @@
 {
-	"common": {
-		"name": "ochsner-web2com",
-		"version": "0.0.1",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
-			}
-		},
-		"title": "Ochsner Web2Com",
-		"titleLang": {
-			"en": "Ochsner Web2Com",
-			"de": "Ochsner Web2Com",
-			"ru": "Окснер Web2Com",
-			"pt": "Ochsner Web2Com",
-			"nl": "Ochsner Web2Com",
-			"fr": "Ochsner Web2Com",
-			"it": "Ochsner Web2Com",
-			"es": "Ochsner Web2Com",
-			"pl": "Ochsner Web2Com",
-			"zh-cn": "奥克斯纳网络通信"
-		},
-		"desc": {
-			"en": "Integrate Ochsner Web2Com Room Terminal",
-			"de": "Ochsner Web2Com Zimmerterminal integrieren",
-			"ru": "Интеграция комнатного терминала Ochsner Web2Com",
-			"pt": "Integrar o terminal de sala Ochsner Web2Com",
-			"nl": "Ochsner Web2Com Room Terminal integreren",
-			"fr": "Intégrer le terminal de salle Ochsner Web2Com",
-			"it": "Integra il terminale di sala Ochsner Web2Com",
-			"es": "Integre la terminal de sala Ochsner Web2Com",
-			"pl": "Zintegruj terminal pokojowy Ochsner Web2Com",
-			"zh-cn": "集成 Ochsner Web2Com 会议室终端"
-		},
-		"authors": [
-			"Prossegger Markus <markus@prossegger.at>"
-		],
-		"keywords": [
-			"ochsner",
-			"heatpump"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "ochsner-web2com.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/maxx8888/ioBroker.ochsner-web2com/main/admin/ochsner-web2com.png",
-		"readme": "https://github.com/maxx8888/ioBroker.ochsner-web2com/blob/main/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "climate-control",
-		"compact": true,
-		"connectionType": "local",
-		"dataSource": "poll",
-		"adminUI": {
-			"config": "materialize"
-		},
-		"eraseOnUpload": true,
-		"dependencies": [
-			{
-				"js-controller": ">=3.3.22"
-			}
-		],
-		"globalDependencies": [
-			{
-				"admin": ">=5.0.0"
-			}
-		]
-	},
-	"native": {
-		"option1": true,
-		"option2": "42"
-	},
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "Device or service connected",
-				"type": "boolean",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+    "common": {
+        "name": "ochsner-web2com",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Ochsner Web2Com",
+        "titleLang": {
+            "en": "Ochsner Web2Com",
+            "de": "Ochsner Web2Com",
+            "ru": "Окснер Web2Com",
+            "pt": "Ochsner Web2Com",
+            "nl": "Ochsner Web2Com",
+            "fr": "Ochsner Web2Com",
+            "it": "Ochsner Web2Com",
+            "es": "Ochsner Web2Com",
+            "pl": "Ochsner Web2Com",
+            "zh-cn": "奥克斯纳网络通信"
+        },
+        "desc": {
+            "en": "Integrate Ochsner Web2Com Room Terminal",
+            "de": "Ochsner Web2Com Zimmerterminal integrieren",
+            "ru": "Интеграция комнатного терминала Ochsner Web2Com",
+            "pt": "Integrar o terminal de sala Ochsner Web2Com",
+            "nl": "Ochsner Web2Com Room Terminal integreren",
+            "fr": "Intégrer le terminal de salle Ochsner Web2Com",
+            "it": "Integra il terminale di sala Ochsner Web2Com",
+            "es": "Integre la terminal de sala Ochsner Web2Com",
+            "pl": "Zintegruj terminal pokojowy Ochsner Web2Com",
+            "zh-cn": "集成 Ochsner Web2Com 会议室终端"
+        },
+        "authors": [
+            "Prossegger Markus <markus@prossegger.at>"
+        ],
+        "keywords": [
+            "ochsner",
+            "heatpump"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "ochsner-web2com.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/maxx8888/ioBroker.ochsner-web2com/main/admin/ochsner-web2com.png",
+        "readme": "https://github.com/maxx8888/ioBroker.ochsner-web2com/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "climate-control",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "adminUI": {
+            "config": "json"
+        },
+        "eraseOnUpload": true,
+        "dependencies": [
+            {
+                "js-controller": ">=3.3.22"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=5.0.0"
+            }
+        ]
+    },
+    "native": {
+        "username": "",
+        "password": "",
+        "serverIP": "",
+        "interval": 1000,
+        "OIDs": []
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {
+            }
+        }
+    ]
 }

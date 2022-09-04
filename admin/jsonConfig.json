@@ -1,0 +1,118 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": 
+    {
+        "_options": 
+        {
+            "type": "panel",
+            "label": "Options",
+            "items": 
+            {
+                "serverIP":{
+                    "type": "text",
+                    "sm": 6,
+                    "md": 3,
+                    "lg": 3,
+                    "label": "Server",
+                    "help": "IP or hostname of your Ochsner Webterminal"
+                },
+                "username":{
+                    "type": "text",
+                    "sm": 6,
+                    "md": 3,
+                    "lg": 3,
+                    "label": "Username",
+                    "help": "Login Username"
+                },
+                "password":{
+                    "type": "text",
+                    "sm": 6,
+                    "md": 3,
+                    "lg": 3,
+                    "label": "Password",
+                    "help": "Login Password"
+                },
+                "interval":{
+                    "type": "number",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "Interval",
+                    "help": "Interval in ms between requesting OID. Smaller than 1000ms is causes troubles on Ochsner Webterminal"
+                }
+            }
+        },
+        "OIDs":
+        {
+            "type": "panel",
+            "label": "OIDs",
+            "items":
+            {
+                "OIDs":
+                {
+                    "newLine": true,
+                    "type":"table",
+                    "label": "OIDs",
+                    "noDelete": false,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "items": 
+                    [
+                        {
+                            "type": "checkbox",
+                            "default": true,
+                            "width": "5%",
+                            "title": "enabled",
+                            "attr": "enabled"
+                        },
+                        {
+                            "type": "text",
+                            "attr": "oid",
+                            "width": "15% ",
+                            "title": "OID",
+                            "filter": false,
+                            "sort": true,
+                            "default": ""
+                        },
+                        {
+                            "type": "text",
+                            "attr": "name",
+                            "width": "30% ",
+                            "title": "Name",
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        },
+                        {
+                            "type": "checkbox",
+                            "title": "is writeable",
+                            "attr": "writeable",
+                            "width": 10,
+                            "default": false
+                        },
+                        {
+                            "type": "checkbox",
+                            "title": "is State",
+                            "attr": "isState",
+                            "width": 10,
+                            "default": false
+                        },
+                        {
+                            "type": "text",
+                            "attr": "stateName",
+                            "width": "10% ",
+                            "title": "State Name",
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+        
+
