@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 "use strict";
 
 /*
@@ -7,9 +8,13 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
+const { TIMEOUT } = require("dns");
+const adapterName = require("./package.json").name.split(".").pop();
 
 // Load your modules here, e.g.:
-// const fs = require("fs");
+const { exec } = require("child_process");
+const { stringify } = require("querystring");
+
 
 class OchsnerWeb2com extends utils.Adapter {
 
@@ -19,13 +24,15 @@ class OchsnerWeb2com extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: "ochsner-web2com",
+			name: adapterName,
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("objectChange", this.onObjectChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
+
+		//};
 	}
 
 	/**
@@ -33,20 +40,22 @@ class OchsnerWeb2com extends utils.Adapter {
 	 */
 	async onReady() {
 		// Initialize your adapter here
+		this.log.info("Current server ip address: " + this.config.serverIP);
 
 		// Reset the connection indicator during startup
 		this.setState("info.connection", true, true);
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
+		//this.log.info("config option1: " + this.config.option1);
+		//this.log.info("config option2: " + this.config.option2);
 
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
 		*/
+
 		await this.setObjectNotExistsAsync("testVariable", {
 			type: "state",
 			common: {
@@ -86,6 +95,25 @@ class OchsnerWeb2com extends utils.Adapter {
 
 		result = await this.checkGroupAsync("admin", "admin");
 		this.log.info("check group user admin group admin: " + result);
+
+		const oids = this.config.OIDs;
+
+		this.log.info("OID: " + oids[0].oid);
+
+		do {
+
+			for(let i=0; i< oids.length; i++)
+			{
+				this.GetData(oids[i].oid, oids[i].name);
+				await this.sleep(this.config.interval);
+			}
+
+		}while(1);
+
+	}
+
+	sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
 	/**
@@ -156,6 +184,93 @@ class OchsnerWeb2com extends utils.Adapter {
 	// 	}
 	// }
 
+	GetData(oid, _name = "")
+	{
+		let value;
+
+		let data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			data += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
+			data += "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" ";
+			data += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+			data += "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ";
+			data += "xmlns:ns=\"http://ws01.lom.ch/soap/\">";
+			data += "<SOAP-ENV:Body><ns:getDpRequest><ref><oid>"+ oid +"</oid><prop/></ref>";
+			data += "<startIndex>0</startIndex><count>-1</count></ns:getDpRequest></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+
+		let	cmd  =  " 'http://" + this.config.serverIP + "/ws' "; 						//concat Server Address
+			cmd  += "--digest "; 														//digest Authentication.... so far curl the only thing found working well
+			cmd  += "-u " + this.config.username + ":" + this.config.password + " "; 	//concat Username and Password
+			cmd  += "-H 'Content-Type: text/xml; charset=utf-8' "; 						//Header
+			cmd  += "-H 'Accept: text/xml' ";											//Header
+			cmd  += "-H 'Cache-Control: no-cache' ";									//Header
+			cmd  += "-H 'Pragma: no-cache' ";											//Header
+			cmd  += "-H 'SOAPAction:http://ws01.lom.ch/soap/listDP' ";					//Header
+			cmd  += "-H 'Content-length: " + data.length + "' -d ";						//Header
+
+		exec("curl" + cmd + "'" + data +"'",(error,stdout,stderr) => {
+
+			this.log.info("error: " + error);
+			this.log.info("response: " + stdout);
+			this.log.info("stderr: " + stderr);
+
+
+			if(String(error).includes("curl: not found"))
+			{
+				this.log.error("Curl not installed. Please use apt-get install curl on console");
+				return;
+			}
+			else if(error != null)
+			{
+				this.log.error("Curl returned Error. Please check Error details");
+			}
+
+			const _value = this.getValue(stdout,"value");
+			this.log.info("Value: " + _value);
+
+			const outputvalue = parseFloat(_value);
+
+			if(!isNaN(outputvalue))
+			{
+				this.setObjectNotExists(oid, {
+					type: "state",
+					common: {
+						name: _name,
+						type: "number",
+						role: "value",
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+
+				this.setState(oid, { val: outputvalue, ack: true });
+			}
+		});
+
+		this.log.info("outside Value: " + value);
+	}
+
+	getValue(_input,_name)
+	{
+		let input = "";
+		let start = "";
+		let end = "";
+		input = _input;
+		start = "<" + _name + ">";
+		end = "</" + _name + ">";
+
+		let startpos = input.indexOf(start);
+
+		if(startpos == -1)
+			return "";
+
+		if(input.indexOf(end) == -1)
+			return "";
+
+		startpos = startpos + start.length;
+		return input.substring(startpos,input.indexOf(end));
+	}
+
 }
 
 if (require.main !== module) {
@@ -168,3 +283,5 @@ if (require.main !== module) {
 	// otherwise start the instance directly
 	new OchsnerWeb2com();
 }
+
+
