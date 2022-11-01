@@ -101,9 +101,57 @@
                         },
                         {
                             "type": "text",
-                            "attr": "stateName",
+                            "attr": "stateID",
                             "width": "10% ",
-                            "title": "State Name",
+                            "title": "State ID",
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        }
+                    ]
+                }
+            }
+        },
+        "OIDStates":
+        {
+            "type": "panel",
+            "label": "States",
+            "items":
+            {
+                "States":
+                {
+                    "newLine": true,
+                    "type":"table",
+                    "label": "States",
+                    "noDelete": false,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "items": 
+                    [
+                        {
+                            "type": "text",
+                            "attr": "stateID",
+                            "width": "30% ",
+                            "title": "State ID",
+                            "filter": false,
+                            "sort": true,
+                            "default": ""
+                        },
+                        {
+                            "type": "number",
+                            "attr": "stateValue",
+                            "width": "10% ",
+                            "title": "State Value",
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        },
+                        {
+                            "type": "text",
+                            "attr": "stateText",
+                            "width": "30% ",
+                            "title": "State Text",
                             "filter": false,
                             "sort": false,
                             "default": ""

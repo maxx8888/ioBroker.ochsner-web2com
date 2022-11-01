@@ -81,7 +81,8 @@
         "password": "",
         "serverIP": "",
         "interval": 1000,
-        "OIDs": []
+        "OIDs": [],
+        "States": []
     },
     "objects": [],
     "instanceObjects": [

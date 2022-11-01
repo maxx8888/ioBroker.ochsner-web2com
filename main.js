@@ -15,7 +15,6 @@ const adapterName = require("./package.json").name.split(".").pop();
 const { exec } = require("child_process");
 const { stringify } = require("querystring");
 
-
 class OchsnerWeb2com extends utils.Adapter {
 
 	/**
@@ -54,7 +53,6 @@ class OchsnerWeb2com extends utils.Adapter {
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
 
 		await this.setObjectNotExistsAsync("testVariable", {
 			type: "state",
@@ -68,8 +66,12 @@ class OchsnerWeb2com extends utils.Adapter {
 			native: {},
 		});
 
+		*/
+
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates("testVariable");
+		//this.subscribeStates("testVariable");
+
+		this.subscribeStates("OID.*");
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates("lights.*");
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
@@ -80,14 +82,14 @@ class OchsnerWeb2com extends utils.Adapter {
 			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
 		*/
 		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
+		//await this.setStateAsync("testVariable", true);
 
 		// same thing, but the value is flagged "ack"
 		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
+		//await this.setStateAsync("testVariable", { val: true, ack: true });
 
 		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+		//await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
 
 		// examples for the checkPassword/checkGroup functions
 		let result = await this.checkPasswordAsync("admin", "iobroker");
@@ -160,6 +162,57 @@ class OchsnerWeb2com extends utils.Adapter {
 		if (state) {
 			// The state was changed
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			if(id.includes(".OID."))
+			{
+				console.log("Change: inside startwidth");
+				const oids = this.config.OIDs;
+				const states = this.config.States;
+
+				for(let i=0; i < oids.length; i++)
+				{
+					console.log("Change: " + id);
+
+					if(id.endsWith(oids[i].oid) && oids[i].isState)
+					{
+						let bFound = false;
+						for(let j=0; j < states.length; j++)
+						{
+							if(states[j].stateID == oids[i].stateID && state.val == states[j].stateValue)
+							{
+								this.setObjectNotExists("States." + oids[i].oid, {
+									type: "state",
+									common: {
+										name: "States." + oids[i].name,
+										type: "string",
+										role: "value",
+										read: true,
+										write: false,
+									},
+									native: {},
+								});
+								this.setState("States." + oids[i].oid, { val: states[j].stateText, ack: true });
+								bFound = true;
+							}
+						}
+
+						if(bFound == false)
+						{
+							this.setObjectNotExists("States." + oids[i].oid, {
+								type: "state",
+								common: {
+									name: "States." + oids[i].name,
+									type: "string",
+									role: "value",
+									read: true,
+									write: false,
+								},
+								native: {},
+							});
+							this.setState("States." + oids[i].oid, { val: "unknown", ack: true });
+						}
+					}
+				}
+			}
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
@@ -186,8 +239,6 @@ class OchsnerWeb2com extends utils.Adapter {
 
 	GetData(oid, _name = "")
 	{
-		let value;
-
 		let data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 			data += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
 			data += "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" ";
@@ -213,7 +264,6 @@ class OchsnerWeb2com extends utils.Adapter {
 			this.log.info("response: " + stdout);
 			this.log.info("stderr: " + stderr);
 
-
 			if(String(error).includes("curl: not found"))
 			{
 				this.log.error("Curl not installed. Please use apt-get install curl on console");
@@ -231,7 +281,7 @@ class OchsnerWeb2com extends utils.Adapter {
 
 			if(!isNaN(outputvalue))
 			{
-				this.setObjectNotExists(oid, {
+				this.setObjectNotExists("OID." + oid, {
 					type: "state",
 					common: {
 						name: _name,
@@ -243,11 +293,13 @@ class OchsnerWeb2com extends utils.Adapter {
 					native: {},
 				});
 
-				this.setState(oid, { val: outputvalue, ack: true });
+				this.setState("OID." + oid, { val: outputvalue, ack: true });
+			}
+			else
+			{
+				this.setState("info.connection", false, true);
 			}
 		});
-
-		this.log.info("outside Value: " + value);
 	}
 
 	getValue(_input,_name)
