@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "ochsner-web2com",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "->",
+                "de": "->",
+                "ru": "->",
+                "pt": "->",
+                "nl": "->",
+                "fr": "->",
+                "it": "->",
+                "es": "->",
+                "pl": "->",
+                "uk": "->",
+                "zh-cn": "->"
+            },
             "0.0.1": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -92,8 +105,7 @@
             "common": {
                 "name": "Information"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.connection",
@@ -106,8 +118,7 @@
                 "write": false,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         }
     ]
 }

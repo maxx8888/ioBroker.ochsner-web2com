@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ochsner-web2com",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Integrate Ochsner Web2Com Room Terminal",
   "author": {
     "name": "Prossegger Markus",
