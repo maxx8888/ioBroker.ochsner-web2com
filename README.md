@@ -107,12 +107,9 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-0.0.1 Initial Release
+### **0.0.1**
+* (maxx8888) Initial Release
 
-### **WORK IN PROGRESS**
-* (maxx8888) initial release
-* (maxx8888) added Adapter Instance Settings
- 
 ## License
 MIT License
 
