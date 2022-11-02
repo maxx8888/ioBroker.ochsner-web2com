@@ -110,7 +110,7 @@ class OchsnerWeb2com extends utils.Adapter {
 
 		const oids = this.config.OIDs;
 
-		this.GetData(oids[counter].oid, oids[counter].name);
+		if(oids) {this.GetData(oids[counter].oid, oids[counter].name);}
 
 		if(counter < oids.length)
 		{
