@@ -109,8 +109,12 @@ class OchsnerWeb2com extends utils.Adapter {
 	myMainLoop(counter=0){
 
 		const oids = this.config.OIDs;
+		this.log.info(oids.length.toString());
 
-		if(oids) {this.GetData(oids[counter].oid, oids[counter].name);}
+		if(oids.length >0)
+		{
+			this.GetData(oids[counter].oid, oids[counter].name);
+		}
 
 		if(counter < oids.length)
 		{
