@@ -15,7 +15,9 @@ const utils = require("@iobroker/adapter-core");
 const { exec } = require("child_process");
 //const { stringify } = require("querystring");
 
-let bRunning = true;
+let intervalMainLoop;
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 class OchsnerWeb2com extends utils.Adapter {
 
@@ -100,24 +102,26 @@ class OchsnerWeb2com extends utils.Adapter {
 		result = await this.checkGroupAsync("admin", "admin");
 		this.log.info("check group user admin group admin: " + result);
 
-		const oids = this.config.OIDs;
-
-		this.log.info("OID: " + oids[0].oid);
-
-		do {
-
-			for(let i=0; i< oids.length; i++)
-			{
-				this.GetData(oids[i].oid, oids[i].name);
-				await this.sleep(this.config.interval);
-			}
-
-		}while(bRunning);
+		this.myMainLoop();
 
 	}
 
-	sleep(ms) {
-		return new Promise(resolve => setTimeout(resolve, ms));
+	myMainLoop(counter=0){
+
+		const oids = this.config.OIDs;
+
+		this.GetData(oids[counter].oid, oids[counter].name);
+
+		if(counter < oids.length)
+		{
+			counter++;
+		}
+		else
+		{
+			counter = 0;
+		}
+
+		intervalMainLoop = wait(this.config.interval).then(() => this.myMainLoop(counter)).catch(() => {this.myMainLoop(0);});
 	}
 
 	/**
@@ -131,7 +135,7 @@ class OchsnerWeb2com extends utils.Adapter {
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
-			bRunning = false;
+			if(intervalMainLoop) {clearTimeout(intervalMainLoop);}
 			callback();
 		} catch (e) {
 			callback();
