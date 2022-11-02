@@ -8,12 +8,14 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const { TIMEOUT } = require("dns");
-const adapterName = require("./package.json").name.split(".").pop();
+//const { TIMEOUT } = require("dns");
+//const adapterName = require("./package.json").name.split(".").pop();
 
 // Load your modules here, e.g.:
 const { exec } = require("child_process");
-const { stringify } = require("querystring");
+//const { stringify } = require("querystring");
+
+let bRunning = true;
 
 class OchsnerWeb2com extends utils.Adapter {
 
@@ -23,7 +25,7 @@ class OchsnerWeb2com extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: adapterName,
+			name: "ochsner-web2com",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
@@ -110,7 +112,7 @@ class OchsnerWeb2com extends utils.Adapter {
 				await this.sleep(this.config.interval);
 			}
 
-		}while(1);
+		}while(bRunning);
 
 	}
 
@@ -129,7 +131,7 @@ class OchsnerWeb2com extends utils.Adapter {
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
-
+			bRunning = false;
 			callback();
 		} catch (e) {
 			callback();
