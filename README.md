@@ -113,8 +113,8 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 ### 0.0.2 (2022-11-02)
 -->
 
-### **0.0.1**
-* (maxx8888) Initial Release
+### **WORK IN PROGRESS**
+* (maxx8888) Release Test
 
 ## License
 MIT License
