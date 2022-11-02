@@ -125,7 +125,7 @@ class OchsnerWeb2com extends utils.Adapter {
 			counter = 0;
 		}
 
-		intervalMainLoop = wait(this.config.interval).then(() => this.myMainLoop(counter)).catch(() => {this.myMainLoop(0);});
+		intervalMainLoop = wait(this.config.interval).then(() => this.myMainLoop(counter)).catch(() => {this.myMainLoop();});
 	}
 
 	/**
