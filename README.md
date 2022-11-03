@@ -105,6 +105,7 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 ## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
+	### **WORK IN PROGRESS**
 ### 0.0.4 (2022-11-02)
 * (maxx8888) Release Test
 
@@ -115,7 +116,8 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 
 ### 0.0.2 (2022-11-02)
 -->
-
+### **WORK IN PROGRESS**
+* (maxx8888) Release Test
 ## License
 MIT License
 
