@@ -3,18 +3,29 @@
         "name": "ochsner-web2com",
         "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            },
             "0.0.2": {
-                "en": "->",
-                "de": "->",
-                "ru": "->",
-                "pt": "->",
-                "nl": "->",
-                "fr": "->",
-                "it": "->",
-                "es": "->",
-                "pl": "->",
-                "uk": "->",
-                "zh-cn": "->"
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
             },
             "0.0.1": {
                 "en": "initial release",
