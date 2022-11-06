@@ -113,7 +113,10 @@ class OchsnerWeb2com extends utils.Adapter {
 
 		if(oids.length >0)
 		{
-			this.GetData(oids[counter].oid, oids[counter].name,oids[counter].isWriteable);
+			if(oids[counter].enabled)
+			{
+				this.GetData(oids[counter].oid, oids[counter].name,oids[counter].isWriteable);
+			}
 		}
 
 		if(counter < oids.length)
