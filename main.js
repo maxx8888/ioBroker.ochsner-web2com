@@ -113,7 +113,7 @@ class OchsnerWeb2com extends utils.Adapter {
 
 		if(oids.length >0)
 		{
-			this.GetData(oids[counter].oid, oids[counter].name);
+			this.GetData(oids[counter].oid, oids[counter].name,oids[counter].isWriteable);
 		}
 
 		if(counter < oids.length)
@@ -139,7 +139,8 @@ class OchsnerWeb2com extends utils.Adapter {
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
-			if(intervalMainLoop) {clearTimeout(intervalMainLoop);}
+			this.log.info("Unload Signal...");
+			if(intervalMainLoop) {clearTimeout(intervalMainLoop); this.log.info("killing MainLoop...");}
 			callback();
 		} catch (e) {
 			callback();
@@ -171,7 +172,8 @@ class OchsnerWeb2com extends utils.Adapter {
 	onStateChange(id, state) {
 		if (state) {
 			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			this.log.info(`state ${id} changed: ${state.val} from: ${state.from} (ack = ${state.ack})`);
+			
 			if(id.includes(".OID."))
 			{
 				console.log("Change: inside startwidth");
@@ -182,12 +184,38 @@ class OchsnerWeb2com extends utils.Adapter {
 				{
 					console.log("Change: " + id);
 
-					if(id.endsWith(oids[i].oid) && oids[i].isState)
+					if(id.endsWith(oids[i].oid))
 					{
-						let bFound = false;
-						for(let j=0; j < states.length; j++)
+						console.log("Change: Write: " + oids[i].isWriteable);
+						if(oids[i].isWriteable && !state.from.startsWith("system.adapter.ochsner-web2com"))
 						{
-							if(states[j].stateID == oids[i].stateID && state.val == states[j].stateValue)
+							this.SetData(oids[i].oid,state.val);
+						}
+
+						if(oids[i].isState)
+						{
+							let bFound = false;
+							for(let j=0; j < states.length; j++)
+							{
+								if(states[j].stateID == oids[i].stateID && state.val == states[j].stateValue)
+								{
+									this.setObjectNotExists("States." + oids[i].oid, {
+										type: "state",
+										common: {
+											name: "States." + oids[i].name,
+											type: "string",
+											role: "value",
+											read: true,
+											write: false,
+										},
+										native: {},
+									});
+									this.setState("States." + oids[i].oid, { val: states[j].stateText, ack: true });
+									bFound = true;
+								}
+							}
+
+							if(bFound == false)
 							{
 								this.setObjectNotExists("States." + oids[i].oid, {
 									type: "state",
@@ -200,25 +228,8 @@ class OchsnerWeb2com extends utils.Adapter {
 									},
 									native: {},
 								});
-								this.setState("States." + oids[i].oid, { val: states[j].stateText, ack: true });
-								bFound = true;
+								this.setState("States." + oids[i].oid, { val: "unknown", ack: true });
 							}
-						}
-
-						if(bFound == false)
-						{
-							this.setObjectNotExists("States." + oids[i].oid, {
-								type: "state",
-								common: {
-									name: "States." + oids[i].name,
-									type: "string",
-									role: "value",
-									read: true,
-									write: false,
-								},
-								native: {},
-							});
-							this.setState("States." + oids[i].oid, { val: "unknown", ack: true });
 						}
 					}
 				}
@@ -247,7 +258,7 @@ class OchsnerWeb2com extends utils.Adapter {
 	// 	}
 	// }
 
-	GetData(oid, _name = "")
+	GetData(oid, _name = "",isWriteable)
 	{
 		let data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 			data += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
@@ -265,7 +276,7 @@ class OchsnerWeb2com extends utils.Adapter {
 			cmd  += "-H 'Accept: text/xml' ";											//Header
 			cmd  += "-H 'Cache-Control: no-cache' ";									//Header
 			cmd  += "-H 'Pragma: no-cache' ";											//Header
-			cmd  += "-H 'SOAPAction:http://ws01.lom.ch/soap/listDP' ";					//Header
+			cmd  += "-H 'SOAPAction:http://ws01.lom.ch/soap/listDP' ";		 			//Header
 			cmd  += "-H 'Content-length: " + data.length + "' -d ";						//Header
 
 		exec("curl" + cmd + "'" + data +"'",(error,stdout,stderr) => {
@@ -298,7 +309,7 @@ class OchsnerWeb2com extends utils.Adapter {
 						type: "number",
 						role: "value",
 						read: true,
-						write: false,
+						write: isWriteable,
 					},
 					native: {},
 				});
@@ -309,6 +320,39 @@ class OchsnerWeb2com extends utils.Adapter {
 			{
 				this.setState("info.connection", false, true);
 			}
+		});
+	}
+
+	SetData(oid, _value)
+	{
+		const index = oid.substring(oid.lastIndexOf("/"),oid.lastIndexOf("/")-oid.length);
+		this.log.info("Index:" + index);
+
+		let data =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		data += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
+		data += "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" ";
+		data += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+		data += "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ";
+		data += "xmlns:ns=\"http://ws01.lom.ch/soap/\">";
+		data += "<SOAP-ENV:Body><ns:writeDpRequest><ref><oid>"+ oid +"</oid><prop/></ref>";
+		data += "<dp><index>"+index+"</index><name/><prop/><desc/><value>"+ _value + "</value><unit/><timestamp>0</timestamp></dp>";
+		data += "</ns:writeDpRequest></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+
+		let	cmd  =  " 'http://" + this.config.serverIP + "/ws' "; 					//concat Server Address
+		cmd  += "--digest "; 														//digest Authentication.... so far curl the only thing found working well
+		cmd  += "-u " + this.config.username + ":" + this.config.password + " "; 	//concat Username and Password
+		cmd  += "-H 'Content-Type: text/xml; charset=utf-8' "; 						//Header
+		cmd  += "-H 'Accept: text/xml' ";											//Header
+		cmd  += "-H 'Cache-Control: no-cache' ";									//Header
+		cmd  += "-H 'Pragma: no-cache' ";											//Header
+		cmd  += "-H 'SOAPAction:http://ws01.lom.ch/soap/listDP' ";					//Header
+		cmd  += "-H 'Content-length: " + data.length + "' -d ";						//Header
+
+		exec("curl" + cmd + "'" + data +"'",(error,stdout,stderr) => {
+
+			this.log.info("error: " + error);
+			this.log.info("response: " + stdout);
+			this.log.info("stderr: " + stderr);
 		});
 	}
 

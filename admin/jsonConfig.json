@@ -88,7 +88,7 @@
                         {
                             "type": "checkbox",
                             "title": "is writeable",
-                            "attr": "writeable",
+                            "attr": "isWriteable",
                             "width": 10,
                             "default": false
                         },
