@@ -107,6 +107,7 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 Placeholder for the next version (at the beginning of the line):
 ### **WORK IN PROGRESS**
 * (maxx8888) added writing OID Functionality
+* (maxx8888) added check if OID is enabled or disabled
 ### 0.0.5 (2022-11-03)
 * (maxx8888) Release Test
 
