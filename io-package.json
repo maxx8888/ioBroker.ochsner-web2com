@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "ochsner-web2com",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
+            "0.0.6": {
+                "en": "OID writing & OID disabling",
+                "de": "OID-Schreiben und OID-Deaktivierung",
+                "ru": "Запись OID и отключение OID",
+                "pt": "Gravação de OID e desativação de OID",
+                "nl": "OID schrijven & OID uitschakelen",
+                "fr": "Écriture OID et désactivation OID",
+                "it": "Scrittura OID e disabilitazione OID",
+                "es": "Escritura de OID y desactivación de OID",
+                "pl": "Zapisywanie OID i wyłączanie OID",
+                "uk": "Запис OID і вимкнення OID",
+                "zh-cn": "OID 写入和 OID 禁用"
+            },
             "0.0.5": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -13,7 +26,8 @@
                 "it": "Versione iniziale",
                 "es": "Versión inicial",
                 "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+                "zh-cn": "首次出版",
+                "uk": "початковий випуск"
             },
             "0.0.4": {
                 "en": "initial release",
@@ -25,7 +39,8 @@
                 "it": "Versione iniziale",
                 "es": "Versión inicial",
                 "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+                "zh-cn": "首次出版",
+                "uk": "початковий випуск"
             },
             "0.0.2": {
                 "en": "initial release",
@@ -37,7 +52,8 @@
                 "it": "Versione iniziale",
                 "es": "Versión inicial",
                 "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+                "zh-cn": "首次出版",
+                "uk": "початковий випуск"
             },
             "0.0.1": {
                 "en": "initial release",
@@ -49,7 +65,8 @@
                 "it": "Versione iniziale",
                 "es": "Versión inicial",
                 "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+                "zh-cn": "首次出版",
+                "uk": "початковий випуск"
             }
         },
         "titleLang": {
@@ -62,7 +79,8 @@
             "it": "Ochsner Web2Com",
             "es": "Ochsner Web2Com",
             "pl": "Ochsner Web2Com",
-            "zh-cn": "奥克斯纳网络通信"
+            "zh-cn": "奥克斯纳网络通信",
+            "uk": "Окснер Web2Com"
         },
         "desc": {
             "en": "Integrate Ochsner Web2Com Room Terminal",
@@ -74,7 +92,8 @@
             "it": "Integra il terminale di sala Ochsner Web2Com",
             "es": "Integre la terminal de sala Ochsner Web2Com",
             "pl": "Zintegruj terminal pokojowy Ochsner Web2Com",
-            "zh-cn": "集成 Ochsner Web2Com 会议室终端"
+            "zh-cn": "集成 Ochsner Web2Com 会议室终端",
+            "uk": "Інтегруйте кімнатний термінал Ochsner Web2Com"
         },
         "authors": [
             "Prossegger Markus <markus@prossegger.at>"

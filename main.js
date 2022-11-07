@@ -176,7 +176,7 @@ class OchsnerWeb2com extends utils.Adapter {
 		if (state) {
 			// The state was changed
 			this.log.info(`state ${id} changed: ${state.val} from: ${state.from} (ack = ${state.ack})`);
-			
+
 			if(id.includes(".OID."))
 			{
 				console.log("Change: inside startwidth");
